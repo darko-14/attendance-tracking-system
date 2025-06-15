@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  server: 
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ats_server
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: ["npm", "start"]
