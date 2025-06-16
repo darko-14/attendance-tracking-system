@@ -1,0 +1,82 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+type FormData = {
+  name: string;
+  email: string;
+  picture?: string;
+}
+
+export function AttendanceForm() {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>()
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    setLoading(true);
+
+
+    setTimeout(() => {
+      setLoading(false)
+      console.log(data)
+      setOpen(false);
+      reset();
+    }, 2000);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+
+      <DialogTrigger asChild>
+        <Button variant="outline">Make a record</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] bg-white rounded-lg p-6">
+        <DialogHeader>
+          <DialogTitle>Check in / Check out</DialogTitle>
+          <DialogDescription>Make an entry or exit</DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid gap-3">
+            <Label htmlFor="name-1">Name</Label>
+            <Input id="name-1" placeholder="John Doe" {...register("name", { required: true })} />
+            {errors.name && <span className="text-red-500">This field is required</span>}
+          </div>
+
+          <div className="grid gap-3">
+            <Label htmlFor="email-1">Email</Label>
+            <Input id="email-1" placeholder="johndoe@gmail.com" {...register("email", { required: true })} />
+            {errors.email && <span className="text-red-500">This field is required</span>}
+          </div>
+
+          <div className="grid gap-3">
+            <Label htmlFor="picture">Picture</Label>
+            <Input id="picture" type="file" placeholder="Take a selfie" />
+          </div>
+
+          <DialogFooter>
+            <Button type="submit">{loading ? 'Loading...' : 'Save'}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
