@@ -1,8 +1,7 @@
-export interface AttendanceRecord {
-    id: string;
+export type AttendanceRecord {
     name: string;
     email: string;
-    imageUrl: string;
-    timestamp: Date;
+    // imageUrl: string;
+    timestamp: string;
     attendanceType: 'ENTRY' | 'EXIT';
 }

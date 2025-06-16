@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import type { AttendanceRecord } from "@/types";
 
 type FormData = {
   name: string;
@@ -20,7 +21,11 @@ type FormData = {
   picture?: string;
 }
 
-export function AttendanceForm() {
+type PropTypes = {
+  addRecord: (record: AttendanceRecord) => void;
+}
+
+export function AttendanceForm({ addRecord }: PropTypes) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false)
   const {
@@ -33,12 +38,18 @@ export function AttendanceForm() {
   const onSubmit: SubmitHandler<FormData> = (data) => {
     setLoading(true);
 
-
     setTimeout(() => {
       setLoading(false)
       console.log(data)
       setOpen(false);
       reset();
+      const d: AttendanceRecord = {
+        name: data.name,
+        email: data.email,
+        timestamp: new Date().toISOString(),
+        attendanceType: 'ENTRY', // Assuming ENTRY for this example
+      }
+      addRecord(d);
     }, 2000);
   }
 
