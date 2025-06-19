@@ -1,7 +1,7 @@
-export type AttendanceRecord {
+export type AttendanceRecord = {
     name: string;
     email: string;
-    // imageUrl: string;
-    timestamp: string;
-    attendanceType: 'ENTRY' | 'EXIT';
+    image?: string;
+    timestamp?: string;
+    attendanceType?: 'ENTRY' | 'EXIT';
 }
