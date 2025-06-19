@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button"
@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import type { AttendanceRecord } from "@/types";
+import CameraCapture from "./CameraCapture";
 
 type FormData = {
   name: string;
@@ -20,9 +22,15 @@ type FormData = {
   picture?: string;
 }
 
-export function AttendanceForm() {
+type PropTypes = {
+  addRecord: (record: AttendanceRecord) => void;
+}
+
+export function AttendanceForm({ addRecord }: PropTypes) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false)
+  const [imageData, setImageData] = useState<Float32Array | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -33,13 +41,25 @@ export function AttendanceForm() {
   const onSubmit: SubmitHandler<FormData> = (data) => {
     setLoading(true);
 
-
     setTimeout(() => {
       setLoading(false)
-      console.log(data)
       setOpen(false);
       reset();
+      const d: AttendanceRecord = {
+        name: data.name,
+        email: data.email,
+        timestamp: new Date().toISOString(),
+        attendanceType: 'ENTRY', // Assuming ENTRY for this example
+      }
+      console.log('onSubmit:', data, imageData);
+      addRecord(d);
     }, 2000);
+  }
+
+  const onCapture = async (data: Float32Array<ArrayBufferLike>) => {
+    setImageData(data);
+    console.log('Captured image data:', imageData);
+
   }
 
   return (
@@ -69,8 +89,9 @@ export function AttendanceForm() {
 
           <div className="grid gap-3">
             <Label htmlFor="picture">Picture</Label>
-            <Input id="picture" type="file" placeholder="Take a selfie" />
+            <CameraCapture onCapture={onCapture} />
           </div>
+
 
           <DialogFooter>
             <Button type="submit">{loading ? 'Loading...' : 'Save'}</Button>

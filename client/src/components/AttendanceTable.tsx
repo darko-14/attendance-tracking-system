@@ -6,53 +6,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import type { AttendanceRecord } from "@/types"
 
-const records = [
-  {
-    name: "INV001",
-    email: "Paid",
-    timestamp: "$250.00",
-    type: "Entry",
-  },
-  {
-    name: "INV002",
-    email: "Pending",
-    timestamp: "$150.00",
-    type: "Exit",
-  },
-  {
-    name: "INV003",
-    email: "Unpaid",
-    timestamp: "$350.00",
-    type: "Exit",
-  },
-  {
-    name: "INV004",
-    email: "Paid",
-    timestamp: "$450.00",
-    type: "Entry",
-  },
-  {
-    name: "INV005",
-    email: "Paid",
-    timestamp: "$550.00",
-    type: "Exit",
-  },
-  {
-    name: "INV006",
-    email: "Pending",
-    timestamp: "$200.00",
-    type: "Exit",
-  },
-  {
-    name: "INV007",
-    email: "Unpaid",
-    timestamp: "$300.00",
-    type: "Entry",
-  },
-]
+type TableProps = {
+  records: AttendanceRecord[];
+}
 
-export function AttendanceTable() {
+export function AttendanceTable({ records }: TableProps) {
   return (
     <Table>
       <TableHeader>
@@ -69,7 +29,7 @@ export function AttendanceTable() {
             <TableCell className="font-medium">{record.name}</TableCell>
             <TableCell>{record.email}</TableCell>
             <TableCell>{record.timestamp}</TableCell>
-            <TableCell className="text-right">{record.type === 'Entry' ? record.type + ' ✅' : record.type + ' ❌'}</TableCell>
+            <TableCell className="text-right">{record.attendanceType === 'ENTRY' ? record.attendanceType + ' ✅' : record.attendanceType + ' ❌'}</TableCell>
           </TableRow>
         ))}
       </TableBody>
